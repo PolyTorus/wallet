@@ -1,10 +1,11 @@
 //! Wallet implementation
 
+use alloc::{string::{String, ToString}, vec::Vec};
 use crate::error::{Result, WalletError};
-use crate::keypair::{KeyPair, KeyType};
-use crate::address::{Address, AddressFormat};
-use crate::signature::{Signature, SignatureScheme};
-use std::collections::HashMap;
+use crate::crypto::keypair::{KeyPair, KeyType};
+use crate::utils::address::{Address, AddressFormat};
+use crate::crypto::signature::{Signature, SignatureScheme};
+use hashbrown::HashMap;
 
 /// Main wallet structure
 #[derive(Clone)]

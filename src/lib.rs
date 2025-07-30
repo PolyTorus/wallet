@@ -1,21 +1,27 @@
-// Wallet modules
-pub mod address;
-pub mod encoding;
+#![cfg_attr(not(feature = "std"), no_std)]
+
+extern crate alloc;
+
+// Core modules
 pub mod error;
-pub mod hd_wallet;
-pub mod keypair;
-pub mod signature;
+
+// Crypto modules
+pub mod crypto;
+
+// Utility modules
+pub mod utils;
+
+// Wallet modules
 pub mod wallet;
 
-
 // Re-export all types
-pub use address::{Address, AddressFormat};
-pub use encoding::{encode_hex, decode_hex, encode_base58, decode_base58};
-pub use error::WalletError;
-pub use hd_wallet::{HdWallet, Mnemonic};
-pub use keypair::{KeyPair, KeyType};
-pub use signature::Signature;
-pub use wallet::{Wallet, WalletManager};
+pub use crypto::keypair::{KeyPair, KeyType};
+pub use crypto::signature::{Signature, SignatureScheme};
+pub use utils::address::{Address, AddressFormat};
+pub use utils::encoding::{encode_hex, decode_hex, encode_base58, decode_base58};
+pub use error::{WalletError, Result};
+pub use wallet::standard::{Wallet, WalletManager};
+pub use wallet::hd::{HdWallet, Mnemonic};
 
 // Common coin types for HD wallets
 pub mod coin_types {

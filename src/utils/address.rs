@@ -1,5 +1,6 @@
+use alloc::{format, string::String};
 use blake3::Hasher;
-use crate::encoding::{encode_hex, encode_base58};
+use crate::utils::encoding::{encode_hex, encode_base58};
 use crate::error::WalletError;
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Copy)]
@@ -37,8 +38,8 @@ impl Address {
     }
 }
 
-impl std::fmt::Display for Address {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Display for Address {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         write!(f, "{}", self.value)
     }
 }

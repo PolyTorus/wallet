@@ -1,14 +1,17 @@
 //! Key pair management for different cryptographic schemes
 
+use alloc::{format, vec::Vec, string::String};
 use crate::error::{Result, WalletError};
 use ed25519_dalek::{SigningKey as Ed25519SigningKey, Signature as Ed25519Signature, Signer, Verifier};
 use secp256k1::{Secp256k1, Keypair as Secp256k1Keypair, SecretKey as Secp256k1SecretKey};
 use rand::rngs::OsRng;
+#[cfg(feature = "serde_support")]
 use serde::{Deserialize, Serialize};
 use sha2::Digest;
 
 /// Supported cryptographic key types
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[cfg_attr(feature = "serde_support", derive(Serialize, Deserialize))]
 pub enum KeyType {
     /// Ed25519 signature scheme (used by Cardano, Solana, etc.)
     Ed25519,
@@ -22,8 +25,8 @@ impl Default for KeyType {
     }
 }
 
-impl std::fmt::Display for KeyType {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Display for KeyType {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         match self {
             KeyType::Ed25519 => write!(f, "Ed25519"),
             KeyType::Secp256k1 => write!(f, "secp256k1"),

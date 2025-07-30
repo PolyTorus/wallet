@@ -1,62 +1,89 @@
 //! Error types for the PolyTorus Wallet library
 
+use alloc::string::String;
+use alloc::format;
+
+#[cfg(feature = "std")]
 use thiserror::Error;
 
 /// Result type alias for wallet operations
-pub type Result<T> = std::result::Result<T, WalletError>;
+pub type Result<T> = core::result::Result<T, WalletError>;
 
 /// Comprehensive error types for wallet operations
-#[derive(Error, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "std", derive(Error))]
+#[derive(Debug, Clone, PartialEq)]
 pub enum WalletError {
     /// Cryptographic operation failed
-    #[error("Cryptographic error: {message}")]
+    #[cfg_attr(feature = "std", error("Cryptographic error: {message}"))]
     CryptographicError { message: String },
 
     /// Invalid key format or data
-    #[error("Invalid key: {message}")]
+    #[cfg_attr(feature = "std", error("Invalid key: {message}"))]
     InvalidKey { message: String },
 
     /// Invalid signature format or verification failed
-    #[error("Invalid signature: {message}")]
+    #[cfg_attr(feature = "std", error("Invalid signature: {message}"))]
     InvalidSignature { message: String },
 
     /// Invalid address format
-    #[error("Invalid address format: {format}")]
+    #[cfg_attr(feature = "std", error("Invalid address format: {format}"))]
     InvalidAddressFormat { format: String },
 
     /// Address derivation failed
-    #[error("Address derivation failed: {message}")]
+    #[cfg_attr(feature = "std", error("Address derivation failed: {message}"))]
     AddressDerivationError { message: String },
 
     /// Encoding/decoding error
-    #[error("Encoding error: {message}")]
+    #[cfg_attr(feature = "std", error("Encoding error: {message}"))]
     EncodingError { message: String },
 
     /// Serialization error
-    #[error("Serialization error: {message}")]
+    #[cfg_attr(feature = "std", error("Serialization error: {message}"))]
     SerializationError { message: String },
 
     /// BIP39 mnemonic related errors
     #[cfg(feature = "bip39")]
-    #[error("Mnemonic error: {message}")]
+    #[cfg_attr(feature = "std", error("Mnemonic error: {message}"))]
     MnemonicError { message: String },
 
     /// HD wallet derivation errors
     #[cfg(feature = "bip39")]
-    #[error("HD wallet error: {message}")]
+    #[cfg_attr(feature = "std", error("HD wallet error: {message}"))]
     HdWalletError { message: String },
 
     /// Invalid input parameters
-    #[error("Invalid input: {message}")]
+    #[cfg_attr(feature = "std", error("Invalid input: {message}"))]
     InvalidInput { message: String },
 
     /// Key storage/retrieval errors
-    #[error("Key storage error: {message}")]
+    #[cfg_attr(feature = "std", error("Key storage error: {message}"))]
     KeyStorageError { message: String },
 
     /// Generic wallet operation error
-    #[error("Wallet operation failed: {message}")]
+    #[cfg_attr(feature = "std", error("Wallet operation failed: {message}"))]
     OperationError { message: String },
+}
+
+#[cfg(not(feature = "std"))]
+impl core::fmt::Display for WalletError {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        match self {
+            WalletError::CryptographicError { message } => write!(f, "Cryptographic error: {}", message),
+            WalletError::InvalidKey { message } => write!(f, "Invalid key: {}", message),
+            WalletError::InvalidSignature { message } => write!(f, "Invalid signature: {}", message),
+            WalletError::InvalidAddressFormat { format } => write!(f, "Invalid address format: {}", format),
+            WalletError::AddressDerivationError { message } => write!(f, "Address derivation failed: {}", message),
+            WalletError::EncodingError { message } => write!(f, "Encoding error: {}", message),
+            WalletError::SerializationError { message } => write!(f, "Serialization error: {}", message),
+            #[cfg(feature = "bip39")]
+            WalletError::MnemonicError { message } => write!(f, "Mnemonic error: {}", message),
+            #[cfg(feature = "bip39")]
+            WalletError::HdWalletError { message } => write!(f, "HD wallet error: {}", message),
+            WalletError::InvalidInput { message } => write!(f, "Invalid input: {}", message),
+            WalletError::KeyStorageError { message } => write!(f, "Key storage error: {}", message),
+            WalletError::OperationError { message } => write!(f, "Wallet operation failed: {}", message),
+        }
+    }
 }
 
 impl WalletError {

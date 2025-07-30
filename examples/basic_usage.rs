@@ -1,4 +1,4 @@
-use polytorus_wallet::{HdWallet, WalletError, KeyType, coin_types};
+use wallet::{HdWallet, WalletError, KeyType, coin_types};
 
 fn main() -> Result<(), WalletError> {
     println!("=== HD Wallet and BIP39 Example ===\n");

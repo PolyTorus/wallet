@@ -1,12 +1,15 @@
 //! Signature types and verification utilities
 
+use alloc::{format, vec::Vec, string::String};
 use crate::error::{Result, WalletError};
+#[cfg(feature = "serde_support")]
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use ed25519_dalek::Verifier;
 
 /// Supported signature schemes
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[cfg_attr(feature = "serde_support", derive(Serialize, Deserialize))]
 pub enum SignatureScheme {
     /// Ed25519 signature scheme
     Ed25519,
@@ -14,8 +17,8 @@ pub enum SignatureScheme {
     Secp256k1,
 }
 
-impl std::fmt::Display for SignatureScheme {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Display for SignatureScheme {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         match self {
             SignatureScheme::Ed25519 => write!(f, "Ed25519"),
             SignatureScheme::Secp256k1 => write!(f, "secp256k1"),
@@ -24,7 +27,8 @@ impl std::fmt::Display for SignatureScheme {
 }
 
 /// A cryptographic signature with metadata
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[cfg_attr(feature = "serde_support", derive(Serialize, Deserialize))]
 pub struct Signature {
     /// The signature bytes
     pub bytes: Vec<u8>,
@@ -233,6 +237,7 @@ impl Default for BatchVerifier {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use alloc::vec;
 
     #[test]
     fn test_ed25519_signature() {

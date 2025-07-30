@@ -1,3 +1,4 @@
+use alloc::{format, string::String, vec::Vec};
 use crate::error::WalletError;
 
 /// Encode bytes to hexadecimal string
@@ -17,7 +18,7 @@ pub fn decode_hex(hex: &str) -> Result<Vec<u8>, WalletError> {
             return Err(WalletError::encoding("Invalid hex chunk"));
         }
         
-        let hex_str = std::str::from_utf8(chunk)
+        let hex_str = core::str::from_utf8(chunk)
             .map_err(|_| WalletError::encoding("Invalid UTF-8 in hex"))?;
         
         let byte = u8::from_str_radix(hex_str, 16)

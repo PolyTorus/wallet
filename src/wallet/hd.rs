@@ -1,6 +1,7 @@
+use alloc::string::{String, ToString};
 use crate::error::WalletError;
-use crate::keypair::{KeyPair, KeyType};
-use crate::wallet::Wallet;
+use crate::crypto::keypair::{KeyPair, KeyType};
+use crate::wallet::standard::Wallet;
 
 /// Simplified mnemonic structure
 #[derive(Debug, Clone)]
